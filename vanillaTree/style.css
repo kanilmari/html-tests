@@ -1,3 +1,4 @@
+/* Style.css */
 .icon svg,
 .toggle svg {
     width: 20px;
@@ -11,8 +12,8 @@
 
 .children {
     padding-left: 23px;
-    display: none;
 }
+
 
 .children.visible {
     display: block;

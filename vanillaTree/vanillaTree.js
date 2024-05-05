@@ -1,7 +1,8 @@
+// vanilla.js
 document.addEventListener("DOMContentLoaded", function () {
     const config = {
-        checkboxMode: 'all',  // Vaihda tämä 'all', 'leaf' tai 'none' riippuen tarpeestasi
-        useIcons: false         // Tämän asetuksen voi asettaa 'true' tai 'false'
+        checkboxMode: 'all',  // 'all', 'leaf' tai 'none'
+        useIcons: false        // 'true' tai 'false'
     };
 
     const data = {
@@ -29,26 +30,27 @@ document.addEventListener("DOMContentLoaded", function () {
     function createNode(nodeData) {
         const nodeElement = document.createElement('div');
         nodeElement.className = 'node';
-
+    
+        const toggle = document.createElement('div');
+        toggle.classList.add('toggle');
         if (nodeData.children && nodeData.children.length > 0) {
-            const toggle = document.createElement('div');
-            toggle.innerHTML = svgToggle;
-            toggle.classList.add('toggle');
-            nodeElement.appendChild(toggle);
-
+            toggle.innerHTML = svgToggle;  // Lataa togglen kuva, jos lapsia on
             toggle.addEventListener('click', function () {
                 this.classList.toggle('rotated');
-                childrenContainer.classList.toggle('visible');
+                toggleChildrenVisibility(childrenContainer);
             });
+        } else {
+            toggle.innerHTML = `<svg class="toggle" viewBox="0 0 24 24" fill="none" stroke="none" stroke-width="0"></svg>`;  // Tyhjä SVG-elementti
         }
-
+        nodeElement.appendChild(toggle);
+    
         if (config.useIcons) {
             const icon = document.createElement('div');
             icon.innerHTML = svgIcon;
             icon.classList.add('icon');
             nodeElement.appendChild(icon);
         }
-
+    
         const shouldIncludeCheckbox = (config.checkboxMode === 'all') ||
                                       (config.checkboxMode === 'leaf' && (!nodeData.children || nodeData.children.length === 0));
         if (shouldIncludeCheckbox) {
@@ -56,28 +58,45 @@ document.addEventListener("DOMContentLoaded", function () {
             checkbox.type = 'checkbox';
             nodeElement.appendChild(checkbox);
         }
-
+    
         const text = document.createElement('span');
         text.textContent = nodeData.name;
         nodeElement.appendChild(text);
-
-        let childrenContainer;
-        if (nodeData.children && nodeData.children.length > 0) {
-            childrenContainer = document.createElement('div');
-            childrenContainer.className = 'children';
-            nodeData.children.forEach(child => childrenContainer.appendChild(createNode(child)));
-            nodeElement.appendChild(childrenContainer);
-        }
-
+    
+        let childrenContainer = document.createElement('div');
+        childrenContainer.className = 'children';
+        childrenContainer.style.display = 'none'; // Initially hidden
+        nodeData.children.forEach(child => childrenContainer.appendChild(createNode(child)));
+        nodeElement.appendChild(childrenContainer);
+    
         return nodeElement;
+    }
+    
+
+    function toggleChildrenVisibility(container) {
+        if (container.style.display === 'none') {
+            // First show the container to get the height
+            container.style.visibility = 'hidden';
+            container.style.display = 'block';
+            const height = container.clientHeight;
+            console.log('Height of container:', height);
+            container.style.display = 'none';
+            container.style.visibility = 'visible';
+            setTimeout(() => {
+                container.style.display = 'block';
+            }, 0); // Short delay before showing content
+        } else {
+            container.style.display = 'none';
+        }
     }
 
     function renderTree() {
         const treeContainer = document.getElementById('tree');
-        treeContainer.innerHTML = ''; // Clear the container
+        treeContainer.innerHTML = '';
         treeContainer.appendChild(createNode(data));
     }
 
-    // Initial render
     renderTree();
 });
+
+

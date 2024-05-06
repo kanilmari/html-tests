@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jsTree Example</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
+</head>
+<body>
+    <div id="jstree">
+        <!-- jsTree will populate this div -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
+    <script>
+        $(function() {
+            // Initialize the jsTree
+            $('#jstree').jstree({
+                'core' : {
+                    'data' : [
+                        { 
+                            "text" : "Root Node", // Name of the root node
+                            "state" : { "opened" : true, "selected" : true }, // Opened and selected by default
+                            "children" : [
+                                { "text" : "Child Node 1" }, // First child node
+                                { 
+                                    "text" : "Child Node 2", // Second child node
+                                    "state" : { "opened" : true }, // Opened by default
+                                    "children" : [
+                                        { "text" : "Grandchild Node 1" } // Child of the second child node
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    'themes': {
+                        'icons': false  // Disable all icons within the tree
+                    }
+                },
+                "checkbox": {
+                    "keep_selected_style": false // Disable default selection styling
+                },
+                "plugins": ["checkbox"] // Enable checkboxes
+            });
+        });
+    </script>
+</body>
+</html>

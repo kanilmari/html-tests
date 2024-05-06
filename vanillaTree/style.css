@@ -14,9 +14,15 @@
     padding-left: 23px;
 }
 
+.children {
+    padding-left: 23px;
+    overflow: hidden;  /* Lisäämäni rivi */
+    max-height: 0;     /* Lisäämäni rivi */
+    transition: max-height 0.15s ease-in-out;  /* Lisäämäni rivi */
+}
 
 .children.visible {
-    display: block;
+    max-height: 1000px;  /* Lisäämäni rivi */
 }
 
 .node > span, .node > .icon, .node > input[type="checkbox"], .node > .toggle {
@@ -36,6 +42,7 @@
     transform: rotate(-90deg);
     margin-right: 5px;
     transform-origin: center;
+    transition: transform 0.15s;
 }
 
 .node > .toggle.rotated {
